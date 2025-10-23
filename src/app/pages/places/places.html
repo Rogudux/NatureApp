@@ -1,0 +1,64 @@
+<!-- Mensajes de estado -->
+<nz-card *ngIf="loading" nzTitle="Lugares">
+  Cargando lugares…
+</nz-card>
+
+<nz-card *ngIf="error" nzTitle="Lugares">
+  <nz-tag nzColor="red" [nzBordered]="false">{{ error }}</nz-tag>
+</nz-card>
+
+<!-- Tabla -->
+<nz-table *ngIf="!loading && !error" [nzData]="places" [nzFrontPagination]="true" nzSize="middle">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Categoría</th>
+      <th>Descripción</th>
+      <th>Lat/Lon</th>
+      <th>Altitud</th>
+      <th>Accesible</th>
+      <th>Cuota de entrada</th>
+      <th>Horario</th>
+      <th style="width:72px">Detalle</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let p of places; trackBy: trackById">
+      <td>{{ p.name }}</td>
+      <td>{{ p.category }}</td>
+
+      <td><span class="desc">{{ p.description }}</span></td>
+
+      <td>
+        {{ p.latitude  | number:'1.4-6' }},
+        {{ p.longitude | number:'1.4-6' }}
+      </td>
+
+      <td>{{ p.elevationMeters | number }} m</td>
+
+      <td>
+        <nz-tag [nzBordered]="false" [nzColor]="p.accessible ? 'green' : 'red'">
+          {{ p.accessible ? 'Sí' : 'No' }}
+        </nz-tag>
+      </td>
+
+      <td>
+        <nz-tag [nzBordered]="false" [nzColor]="p.entryFee === 0 ? 'blue' : 'gold'">
+          {{ p.entryFee === 0 ? 'Gratis' : (p.entryFee | currency:'MXN':'symbol') }}
+        </nz-tag>
+      </td>
+
+      <td>{{ p.openingHours }}</td>
+
+      <td>
+        <button
+          nz-button nzType="primary" nzSize="small"
+          [routerLink]="['/admin/places', p.id]"
+          nz-tooltip nzTooltipTitle="Ver detalle">
+          <span nz-icon nzType="eye"></span>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

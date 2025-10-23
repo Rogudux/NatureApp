@@ -1,0 +1,18 @@
+:host {
+  display: block;
+}
+
+.desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* muestra 2 líneas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+nz-table {
+  width: 100%;
+}
+
+th, td {
+  vertical-align: middle;
+}

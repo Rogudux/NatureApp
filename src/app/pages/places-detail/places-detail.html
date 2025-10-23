@@ -1,0 +1,88 @@
+<nz-card *ngIf="loading" nzTitle="Detalle del lugar">
+  Cargando…
+</nz-card>
+
+<nz-card *ngIf="error" nzTitle="Detalle del lugar">
+  <nz-tag nzColor="red" [nzBordered]="false">{{ error }}</nz-tag>
+</nz-card>
+
+<ng-container *ngIf="!loading && !error && place">
+  <!-- Encabezado -->
+  <nz-page-header [nzTitle]="place.name" [nzSubtitle]="place.category"></nz-page-header>
+
+  <!-- Datos generales -->
+  <nz-card nzTitle="Información">
+    <nz-descriptions nzBordered [nzColumn]="2">
+      <nz-descriptions-item nzTitle="Descripción" [nzSpan]="2">
+        {{ place.description }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Lat/Lon">
+        {{ place.latitude }}, {{ place.longitude }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Altitud">
+        {{ place.elevationMeters }} m
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Accesible">
+        <nz-tag [nzBordered]="false" [nzColor]="place.accessible ? 'green' : 'default'">
+          {{ place.accessible ? 'Sí' : 'No' }}
+        </nz-tag>
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Cuota de entrada">
+        {{ place.entryFee | currency }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Horario" [nzSpan]="2">
+        {{ place.openingHours }}
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </nz-card>
+
+  <!-- Galería de fotos -->
+  <nz-card nzTitle="Galería" *ngIf="place?.photos?.length">
+    <div class="gallery">
+      <img
+        *ngFor="let p of place!.photos"
+        [src]="p.url"            
+        alt="Foto del lugar"
+        loading="lazy"
+        class="gallery-item"
+      />
+    </div>
+  </nz-card>
+
+  <!-- Senderos -->
+  <nz-card nzTitle="Senderos" *ngIf="place.trails?.length">
+    <nz-table [nzData]="place.trails" nzBordered [nzFrontPagination]="true" [nzPageSize]="5">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Distancia (km)</th>
+          <th>Dificultad</th>
+          <th>Tiempo</th>
+          <th>Loop</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of place.trails">
+          <td>{{ t.name }}</td>
+          <td>{{ t.distanceKm | number : '1.0-2' }}</td>
+          <td>
+            <nz-tag [nzBordered]="false" [nzColor]="difficultyColor(t.difficulty)">
+              {{ t.difficulty }}
+            </nz-tag>
+          </td>
+          <td>{{ t.estimatedTimeMinutes }} min</td>
+          <td>
+            <nz-tag [nzBordered]="false" [nzColor]="t.isLoop ? 'green' : 'default'">
+              {{ t.isLoop ? 'Sí' : 'No' }}
+            </nz-tag>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+
+  <!-- Mini mapa -->
+  <nz-card nzTitle="Mapa">
+    <div #placeMap class="map mini"></div>
+  </nz-card>
+</ng-container>
