@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "create:secret-env": "node setup-env.js"
+
   },
   "prettier": {
     "printWidth": 100,
