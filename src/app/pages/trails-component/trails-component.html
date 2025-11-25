@@ -1,49 +1,89 @@
+
 <!-- Tarjeta de carga -->
-<nz-card *ngIf="loading" nzTitle="Senderos">
+<button nz-button nzType="primary" (click)="analyzeTrails()">
+    Analizar ordenes con ia
+</button>
+
+<nz-spin [nzSpinning]="loadingModal" nzTip="Analizando ordenes..." >
+
+  <nz-card *ngIf="loading" nzTitle="Senderos">
   <nz-tag [nzBordered]="false">Cargando trails…</nz-tag>
-</nz-card>
+  </nz-card>
 
-<!-- Tarjeta de error -->
-<nz-card *ngIf="error" nzTitle="Senderos">
-  <nz-tag nzColor="red" [nzBordered]="false">{{ error }}</nz-tag>
-</nz-card>
+  <!-- Tarjeta de error -->
+  <nz-card *ngIf="error" nzTitle="Senderos">
+    <nz-tag nzColor="red" [nzBordered]="false">{{ error }}</nz-tag>
+  </nz-card>
 
-<!-- Tabla de trails -->
-<nz-table
-  *ngIf="!loading && !error"
-  [nzData]="trails"
-  [nzFrontPagination]="true"
-  [nzPageSize]="10"
-  nzBordered
+  <!-- Tabla de trails -->
+  <nz-table
+    *ngIf="!loading && !error"
+    [nzData]="trails"
+    [nzFrontPagination]="true"
+    [nzPageSize]="10"
+    nzBordered
+  >
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Distancia (km)</th>
+        <th>Dificultad</th>
+        <th>Tiempo estimado</th>
+        <th>¿Loop?</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let t of trails; trackBy: trackById">
+        <td>{{ t.name }}</td>
+        <td>{{ t.distanceKm | number : '1.0-2' }}</td>
+        <td>
+          <nz-tag
+            [nzBordered]="false"
+            [nzColor]="difficultyColor(t.difficulty)"
+          >
+            {{ t.difficulty }}
+          </nz-tag>
+        </td>
+        <td>{{ t.estimatedTimeMinutes }} min</td>
+        <td>
+          <nz-tag [nzBordered]="false" [nzColor]="t.isLoop ? 'green' : 'default'">
+            {{ t.isLoop ? 'Sí' : 'No' }}
+          </nz-tag>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+</nz-spin>
+
+<nz-modal
+    [(nzVisible)] = "modalVisible"
+    nzTitle = "Analisis inteligente de trails"
+    nzWidth = "720"
+    nzCentered ="true"
+    (nzOnCancel) = "modalVisible = false"
+    (nzOnOk) = "modalVisible = false"
+
 >
-  <thead>
-    <tr>
-      <th>Nombre</th>
-      <th>Distancia (km)</th>
-      <th>Dificultad</th>
-      <th>Tiempo estimado</th>
-      <th>¿Loop?</th>
-    </tr>
-  </thead>
+    <ng-container *nzModalContent>
+        <h1>Total de trails</h1>
+        <p> {{analyze?.totalTrails}}</p>
 
-  <tbody>
-    <tr *ngFor="let t of trails; trackBy: trackById">
-      <td>{{ t.name }}</td>
-      <td>{{ t.distanceKm | number : '1.0-2' }}</td>
-      <td>
-        <nz-tag
-          [nzBordered]="false"
-          [nzColor]="difficultyColor(t.difficulty)"
-        >
-          {{ t.difficulty }}
-        </nz-tag>
-      </td>
-      <td>{{ t.estimatedTimeMinutes }} min</td>
-      <td>
-        <nz-tag [nzBordered]="false" [nzColor]="t.isLoop ? 'green' : 'default'">
-          {{ t.isLoop ? 'Sí' : 'No' }}
-        </nz-tag>
-      </td>
-    </tr>
-  </tbody>
-</nz-table>
+        <h1>Media de tiempo de trails</h1>
+        <p> {{analyze?.avgEstimatedTime}}</p>
+
+        <h1>Media de distancia de trails</h1>
+        <p> {{analyze?.avgEstimatedDistance}}</p>
+
+        <h1>Trail mas largo</h1>
+        <p> {{analyze?.MostLongerTrail}}</p>
+
+        <h1>Datos extra de los trails</h1>
+        <p> {{analyze?.patterns}}</p>
+
+    </ng-container>
+</nz-modal>
+
+
+

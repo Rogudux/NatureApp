@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TrailService } from '../../core/services/trail.service';
 import { TrailModel } from '../../core/models/trail.model';
+import { AiAnalyze } from '../../core/models/ai-analyzeTrails.model';
 
 @Component({
   selector: 'app-trails',
@@ -13,8 +14,30 @@ export class TrailsComponent implements OnInit {
   trails: TrailModel[] = [];
   loading = false;
   error: string | null = null;
+  loadingModal = false;
+  modalVisible = false;
+  analyze : AiAnalyze |null = null
 
   constructor(private trailService: TrailService) {}
+
+
+  analyzeTrails() {
+    console.log('ANALIZANDOOOO.....');
+    this.loadingModal = true;
+    this.trailService.getAiAnalyzeTrails().subscribe({
+      next: (res) => {
+        console.log(res);
+        this.loadingModal = false;
+        this.analyze = res
+        this.modalVisible = true
+      },
+      error: (error) => {
+        console.error(error);
+        this.loading = false;
+      }
+    });
+
+  }
 
   ngOnInit(): void {
     this.loading = true;

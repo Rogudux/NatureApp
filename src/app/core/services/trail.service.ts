@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { TrailModel } from '../models/trail.model';
+import { AiAnalyze } from '../models/ai-analyzeTrails.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,5 +18,10 @@ export class TrailService {
   getAllTrails(): Observable<TrailModel[]> {
     console.log('trayendo trails');
     return this.httpCliente.get<TrailModel[]>(this.baseUrl);
+  }
+
+  getAiAnalyzeTrails():Observable<AiAnalyze>{
+    const result = this.httpCliente.get<AiAnalyze>(`${environment.API_URL}/trails/ai-analyze`)
+    return result;
   }
 }

@@ -18,6 +18,8 @@ import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzImageModule } from 'ng-zorro-antd/image';
 import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 
 
@@ -28,7 +30,7 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
   ],
   imports: [
     NzTableModule, NzIconModule, NzButtonModule, NzCardModule, CommonModule, RouterModule.forChild(adminRoutes), NzTagModule, NzTagModule, NzTagModule, 
-    NzDescriptionsModule,  NzPageHeaderModule, NzDescriptionsModule, NzImageModule, NzGridModule
+    NzDescriptionsModule,  NzPageHeaderModule, NzDescriptionsModule, NzImageModule, NzGridModule, NzSpinModule, NzModalModule
 
   ],
   providers: [PlaceService, TrailService],
