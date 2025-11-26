@@ -46,5 +46,3 @@ jobs:
             docker pull bastian13579/nature-app:latest
             cd containers
             docker compose up -d
-
-  
