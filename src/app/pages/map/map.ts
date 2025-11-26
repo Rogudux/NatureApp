@@ -29,7 +29,7 @@ export class MapComponent {
       style: this.style,
       container: "map",
       center: [-88.296, 18.500],
-      zoom: 15
+      zoom: 5
     })
 
     this.placesService.getAllPlaces().subscribe((backPlaceResponse)=>{
